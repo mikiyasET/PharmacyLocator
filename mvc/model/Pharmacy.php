@@ -46,6 +46,14 @@ class Pharmacy extends Database
         }
         return false;
     }
+    protected function checkNameEmailExceptThis() {
+        $result = $this->c()->prepare("SELECT * FROM pharmacy WHERE (name = ? or email = ?) and pid != ?");
+        $result->execute([$this->name,$this->email,$this->id]);
+        if ($result->rowCount() > 0) {
+            return true;
+        }
+        return false;
+    }
     protected function checkID() {
         $result = $this->c()->prepare("SELECT * FROM pharmacy WHERE pid = ?");
         $result->execute([$this->id]);
@@ -53,5 +61,21 @@ class Pharmacy extends Database
             return true;
         }
         return false;
+    }
+    protected function showAll() {
+        $result = $this->c()->query("SELECT * FROM pharmacy");
+        $result->execute();
+        if ($result->rowCount() > 0) {
+            return $result->fetchAll();
+        }
+        return [];
+    }
+    protected function show() {
+        $result = $this->c()->prepare("SELECT * FROM pharmacy WHERE pid = ?");
+        $result->execute([$this->id]);
+        if ($result->rowCount() > 0) {
+            return new ArrayObject($result->fetch(), ArrayObject::ARRAY_AS_PROPS);
+        }
+        return [];
     }
 }

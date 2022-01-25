@@ -328,7 +328,105 @@ function locationBtn(data = 'add',id = null) {
         hideLoading()
     }
 }
-function pharmacyBtn(data = 'add',id = null) {}
+function pharmacyBtn(data = 'add',id = null) {
+    showLoading()
+    let name = $("input[name='name']").val() ?? '';
+    let mapLink = $("input[name='mapLink']").val() ?? '';
+    let location = $("select[name='location']").val() ?? '';
+    let email = $("input[name='email']").val() ?? '';
+    let password = $("input[name='password']").val() ?? '';
+    let cpassword = $("input[name='cpassword']").val() ?? '';
+
+    console.log(location);
+    if ((password == cpassword) || data == 'edit') {
+        if (name != '' && mapLink != '' && location != '' && email != '' && ((password != '' && cpassword != '') || data == 'edit')) {
+            let request = $.ajax({
+                url: "ajax/index.php",
+                type: "POST",
+                data: {
+                    id: id,
+                    name: name,
+                    mapLink: mapLink,
+                    location: location,
+                    email: email,
+                    password: password,
+                    submit: data === 'add' ? 'addPharmacy' : 'editPharmacy'
+                },
+                dataType: "text"
+            });
+            request.done(function (output) {
+                console.log(output);
+                switch (output) {
+                    case 'pharmacySuccess':
+                        Toast.fire({
+                            icon: 'success',
+                            title: 'Location added successfully'
+                        })
+                        loadPage('pharmacy', 'add')
+                        break;
+                    case 'pharmacyNameEmailExist':
+                        Toast.fire({
+                            icon: 'error',
+                            title: 'Name already exists'
+                        })
+                        break;
+                    case 'passwordLength':
+                        Toast.fire({
+                            icon: 'error',
+                            title: 'Password length must be 8 or greater in length'
+                        })
+                        break;
+                    case 'emailError':
+                        Toast.fire({
+                            icon: 'error',
+                            title: 'Invalid email address'
+                        })
+                        break;
+
+                    case 'editPharmacySuccess':
+                        Toast.fire({
+                            icon: 'success',
+                            title: 'Location modified successfully'
+                        })
+                        loadPage('pharmacy', 'edit')
+                        break;
+                    case 'editPharmacyUnknownID':
+                        Toast.fire({
+                            icon: 'error',
+                            title: 'Id unknown, Please refresh the page'
+                        })
+                        break;
+                    default:
+                        Toast.fire({
+                            icon: 'error',
+                            title: 'Internal Error'
+                        })
+                }
+                hideLoading()
+            });
+            request.fail(function (jqXHR, textStatus) {
+                Toast.fire({
+                    icon: 'error',
+                    title: 'Connection Error'
+                })
+                hideLoading()
+            });
+        } else {
+            Toast.fire({
+                icon: 'error',
+                title: 'Empty field'
+            })
+            hideLoading()
+        }
+    }
+    else {
+        Toast.fire({
+            icon: 'error',
+            title: 'Password doesn\'t match'
+        })
+        hideLoading()
+    }
+}
 function storeBtn(data = 'add',id = null) {}
 
 

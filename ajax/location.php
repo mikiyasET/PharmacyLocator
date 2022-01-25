@@ -105,8 +105,9 @@ if ($data == 'add') {
     <?php
 } else {
     ?>
-    <div class="mt-5">
-        <table id="pharmacyTable" class="table table-borderless table-hover">
+        <div id="main-content">
+            <div class="mt-5">
+                <table id="pharmacyTable" class="table table-borderless table-hover">
             <thead>
             <tr>
                 <th scope="col">#</th>
@@ -133,7 +134,8 @@ if ($data == 'add') {
 
             </tbody>
         </table>
-    </div>
+            </div>
+        </div>
     <?php
 }
 ?>

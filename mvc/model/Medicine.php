@@ -45,4 +45,20 @@ class Medicine extends Database {
         }
         return false;
     }
+    protected function showAll() {
+        $result = $this->c()->query("SELECT * FROM medicine");
+        $result->execute();
+        if ($result->rowCount() > 0) {
+            return $result->fetchAll();
+        }
+        return [];
+    }
+    protected function show() {
+        $result = $this->c()->prepare("SELECT * FROM medicine WHERE mid = ?");
+        $result->execute([$this->id]);
+        if ($result->rowCount() > 0) {
+            return new ArrayObject($result->fetch(), ArrayObject::ARRAY_AS_PROPS);
+        }
+        return [];
+    }
 }

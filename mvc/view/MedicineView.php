@@ -10,4 +10,13 @@ class MedicineView extends Medicine
     {
         return parent::checkID();
     }
+    public function all()
+    {
+        return $this->showAll();
+    }
+
+    public function one()
+    {
+        return $this->show();
+    }
 }

@@ -10,4 +10,13 @@ class StoreView extends Store
     {
         return parent::checkMed();
     }
+    public function all()
+    {
+        return $this->showAll();
+    }
+
+    public function one()
+    {
+        return $this->show();
+    }
 }

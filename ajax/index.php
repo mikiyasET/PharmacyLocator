@@ -33,6 +33,26 @@ if (isset($_POST['submit'])) {
                 echo 'locationNameExist';
             }
             break;
+        case 'addPharmacy':
+            $pharmacy->name = $pharmacyv->name = $_POST['name'] ?? '';
+            $pharmacy->email = $pharmacyv->email = $_POST['email'] ?? '';
+            $pharmacy->location = $_POST['location'] ?? '';
+            $pharmacy->mapLink = $_POST['mapLink'] ?? '';
+            $pharmacy->password = $_POST['password'] ?? '';
+            if (filter_var($pharmacy->email, FILTER_VALIDATE_EMAIL)) {
+                if (strlen($pharmacy->password) >= 8) {
+                    if (!$pharmacyv->checkNameEmail()) {
+                        echo $pharmacy->add() ? 'pharmacySuccess' : 'errorDefault';
+                    } else {
+                        echo 'pharmacyNameEmailExist';
+                    }
+                } else {
+                    echo 'passwordLength';
+                }
+            } else {
+                echo 'emailError';
+            }
+            break;
 
         case 'editLocation':
             $location->name = $locationv->name = $_POST['name'];
@@ -46,10 +66,50 @@ if (isset($_POST['submit'])) {
                 echo 'editLocationUnknownID';
             }
             break;
+        case 'editPharmacy':
+            $pharmacy->name = $pharmacyv->name = $_POST['name'] ?? '';
+            $pharmacy->email = $pharmacyv->email = $_POST['email'] ?? '';
+            $pharmacy->location = $_POST['location'] ?? '';
+            $pharmacy->mapLink = $_POST['mapLink'] ?? '';
+            if ($pharmacyv->checkID()) {
+                if (filter_var($pharmacy->email, FILTER_VALIDATE_EMAIL)) {
+                    if (!$pharmacyv->checkNameEmailExceptThis()) {
+                        echo $pharmacy->edit() ? 'editPharmacySuccess' : 'errorDefault2';
+                    } else {
+                        echo 'pharmacyNameEmailExist';
+                    }
+                } else {
+                    echo 'emailError';
+                }
+            }else {
+                echo 'editPharmacyUnknownID';
+            }
+            break;
 
         case 'removeLocation':
             if ($locationv->checkID()) {
                 echo $location->remove() ? 'success' : 'failure';
+            } else {
+                echo 'unknownID';
+            }
+            break;
+        case 'removeMedicine':
+            if ($medicinev->checkID()) {
+                echo $medicine->remove() ? 'success' : 'failure';
+            } else {
+                echo 'unknownID';
+            }
+            break;
+        case 'removePharmacy':
+            if ($pharmacyv->checkID()) {
+                echo $pharmacy->remove() ? 'success' : 'failure';
+            } else {
+                echo 'unknownID';
+            }
+            break;
+        case 'removeStore':
+            if ($storev->checkID()) {
+                echo $store->remove() ? 'success' : 'failure';
             } else {
                 echo 'unknownID';
             }
