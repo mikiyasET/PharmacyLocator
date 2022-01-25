@@ -2,10 +2,10 @@
 
 class Record extends Database
 {
-    protected $id;
-    protected $user;
-    protected $medicine;
-    protected $counter;
+    public $id;
+    public $user;
+    public $medicine;
+    public $counter;
 
     protected function add() {
         if (!$this->checkMed()) {

@@ -1,10 +1,10 @@
 <?php
 
 class Medicine extends Database {
-    protected $id;
-    protected $name;
-    protected $description;
-    protected $admin;
+    public $id;
+    public $name;
+    public $description;
+    public $admin;
 
     protected function add() {
         $this->id = uniqid();

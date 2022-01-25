@@ -2,9 +2,9 @@
 
 class Admin extends Database
 {
-    protected $id;
-    protected $username;
-    protected $password;
+    public $id;
+    public $username;
+    public $password;
 
     protected function add() {
         $this->id = uniqid();

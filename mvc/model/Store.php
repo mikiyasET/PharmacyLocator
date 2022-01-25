@@ -2,9 +2,9 @@
 
 class Store extends Database
 {
-    protected $id;
-    protected $medicine;
-    protected $pharmacy;
+    public $id;
+    public $medicine;
+    public $pharmacy;
 
     protected function add() {
         $this->id = uniqid();

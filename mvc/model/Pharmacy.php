@@ -2,24 +2,25 @@
 
 class Pharmacy extends Database
 {
-    protected $id;
-    protected $name;
-    protected $email;
-    protected $password;
-    protected $location;
+    public $id;
+    public $name;
+    public $email;
+    public $password;
+    public $mapLink;
+    public $location;
 
     protected function add() {
         $this->id = uniqid();
         if (!$this->checkNameEmail()) {
-            $result = $this->c()->prepare("INSERT INTO pharmacy (pid, name, email, password, lid) VALUES (?,?,?,?,?)");
-            return $result->execute([$this->id,$this->name,$this->email,password_hash($this->password, PASSWORD_BCRYPT),$this->location]);
+            $result = $this->c()->prepare("INSERT INTO pharmacy (pid, name, email, password,mapLink, lid) VALUES (?,?,?,?,?,?)");
+            return $result->execute([$this->id,$this->name,$this->email,password_hash($this->password, PASSWORD_BCRYPT),$this->mapLink,$this->location]);
         }
         return false;
     }
     protected function edit() {
         if ($this->checkID()) {
-            $result = $this->c()->prepare("UPDATE pharmacy SET name = ?,email = ?,lid = ? WHERE pid = ?");
-            return $result->execute([$this->name,$this->email,$this->location]);
+            $result = $this->c()->prepare("UPDATE pharmacy SET name = ?,email = ?,lid = ?,mapLink = ? WHERE pid = ?");
+            return $result->execute([$this->name,$this->email,$this->location,$this->mapLink,$this->id]);
         }
         return false;
     }
