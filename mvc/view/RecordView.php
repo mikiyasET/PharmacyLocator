@@ -14,4 +14,8 @@ class RecordView extends Record
     {
         return parent::counter();
     }
+    public function all()
+    {
+        return $this->showAll();
+    }
 }

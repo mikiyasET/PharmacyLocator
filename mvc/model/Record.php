@@ -54,4 +54,13 @@ class Record extends Database
         $exe = $stmt->fetch();
         return intval($exe['counter']);
     }
+
+    protected function showAll() {
+        $result = $this->c()->query("SELECT rid, uid, sum(counter) as searched, name, description FROM record join medicine m on m.mid = record.mid group by counter order by searched");
+        $result->execute();
+        if ($result->rowCount() > 0) {
+            return $result->fetchAll();
+        }
+        return [];
+    }
 }

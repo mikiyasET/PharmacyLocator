@@ -11,12 +11,12 @@ if ($data == 'add') {
         <div class="row">
             <div class="col-md-6">
                 <div class="mb-3">
-                    <label for="LocationInput" class="form-label">Pharmacy Name</label>
-                    <input type="text" name="name" class="form-control" id="LocationInput" tabindex="1" placeholder="Name">
+                    <label for="nameInput" class="form-label">Pharmacy Name</label>
+                    <input type="text" name="name" class="form-control" id="nameInput" tabindex="1" placeholder="Name">
                 </div>
                 <div class="mb-3">
-                    <label for="LocationInput" class="form-label">Map Link</label>
-                    <input type="url" name="mapLink" class="form-control" id="LocationInput" tabindex="2" placeholder="Google Map Link">
+                    <label for="MapInput" class="form-label">Map Link</label>
+                    <input type="url" name="mapLink" class="form-control" id="MapInput" tabindex="2" placeholder="Google Map Link">
                 </div>
                 <div class="mb-3">
                     <label for="LocationSelectInput" class="form-label">Location</label>
@@ -33,16 +33,16 @@ if ($data == 'add') {
             </div>
             <div class="col-md-6">
                 <div class="mb-3">
-                    <label for="LocationInput" class="form-label">Email</label>
-                    <input type="email" name="email" class="form-control" id="LocationInput" tabindex="4" placeholder="Email">
+                    <label for="EmailInput" class="form-label">Email</label>
+                    <input type="email" name="email" class="form-control" id="EmailInput" tabindex="4" placeholder="Email">
                 </div>
                 <div class="mb-3">
-                    <label for="LocationInput" class="form-label">Password</label>
-                    <input type="password" name="password" class="form-control" id="LocationInput" tabindex="5" placeholder="Password">
+                    <label for="passInput" class="form-label">Password</label>
+                    <input type="password" name="password" class="form-control" id="passInput" tabindex="5" placeholder="Password">
                 </div>
                 <div class="mb-3">
-                    <label for="LocationInput" class="form-label">Confirm Password</label>
-                    <input type="password" name="cpassword" class="form-control" id="LocationInput" tabindex="6" placeholder="Re-Type Password">
+                    <label for="cpassInput" class="form-label">Confirm Password</label>
+                    <input type="password" name="cpassword" class="form-control" id="cpassInput" tabindex="6" placeholder="Re-Type Password">
                 </div>
             </div>
         </div>
@@ -52,7 +52,8 @@ if ($data == 'add') {
         </div>
     </div>
     <?php
-} else if ($data == 'edit') {
+}
+else if ($data == 'edit') {
     $pharmacies = new PharmacyView();
     $pharmacies->id = $id;
     $name = '';
@@ -66,7 +67,8 @@ if ($data == 'add') {
         $link = $pharmacy->mapLink ?? '';
         $locationID = $pharmacy->lid ?? '';
         $email = $pharmacy->email ?? '';
-    }else {
+    }
+    else {
         $status = 'disabled';
     }
     ?>
@@ -79,8 +81,8 @@ if ($data == 'add') {
                     <input type="text" name="name" class="form-control" id="LocationInput" tabindex="1" placeholder="Name" value="<?php echo $name ?>" <?php echo $status; ?> >
                 </div>
                 <div class="mb-3">
-                    <label for="LocationInput" class="form-label">Map Link</label>
-                    <input type="url" name="mapLink" class="form-control" id="LocationInput" tabindex="2" placeholder="Google Map Link" value="<?php echo $link ?>" <?php echo $status; ?>>
+                    <label for="MapInput" class="form-label">Map Link</label>
+                    <input type="url" name="mapLink" class="form-control" id="MapInput" tabindex="2" placeholder="Google Map Link" value="<?php echo $link ?>" <?php echo $status; ?>>
                 </div>
 
             </div>
@@ -99,8 +101,8 @@ if ($data == 'add') {
                     </select>
                 </div>
                 <div class="mb-3">
-                    <label for="LocationInput" class="form-label">Email</label>
-                    <input type="email" name="email" class="form-control" id="LocationInput" tabindex="4" placeholder="Email" value="<?php echo $email ?>" <?php echo $status; ?>>
+                    <label for="EmailInput" class="form-label">Email</label>
+                    <input type="email" name="email" class="form-control" id="EmailInput" tabindex="4" placeholder="Email" value="<?php echo $email ?>" <?php echo $status; ?>>
                 </div>
             </div>
         </div>
@@ -147,7 +149,8 @@ if ($data == 'add') {
 
     </div>
     <?php
-} else if ($data == 'remove') {
+}
+else if ($data == 'remove') {
     ?>
     <div id="main-content">
         <div class="mt-5">
@@ -187,7 +190,8 @@ if ($data == 'add') {
         </div>
     </div>
     <?php
-} else {
+}
+else {
     ?>
     <div id="main-content">
         <div class="mt-5">
@@ -233,14 +237,5 @@ if ($data == 'add') {
 <script>
     $(document).ready(function() {
         $('#pharmacyTable').DataTable();
-        $("input:checkbox").on('change',function() {
-            let from = $(this).attr("data-type");
-            let id = $(this).attr("data-id");
-            if ($(this).is(':checked')) {
-                toggleDisable(from,id,1)
-            }else {
-                toggleDisable(from,id,0)
-            }
-        })
     })
 </script>

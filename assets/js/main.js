@@ -18,8 +18,6 @@ locationTab.hide()
 pharmacyTab.hide()
 storeTab.hide()
 
-
-
 function loadPage(location,data = '',id = '') {
     showLoading()
     let request;
@@ -145,6 +143,9 @@ function add(to) {
             break
         case 'password':
             passwordBtn();
+            break;
+        case 'passwordP':
+            passwordBtn('pharmacy');
             break;
         default:
             Toast.fire({
@@ -428,8 +429,136 @@ function pharmacyBtn(data = 'add',id = null) {
     }
 }
 function storeBtn(data = 'add',id = null) {}
+function passwordBtn(to = 'admin') {
+    let oldPass = $("input[name='current']").val();
+    let newPass = $("input[name='new']").val();
+    let rePass = $("input[name='confirm']").val();
+    if (rePass != '' && newPass != '' && oldPass != '') {
+        if (newPass == rePass) {
+            showLoading()
+            let request = $.ajax({
+                url: "ajax/index.php",
+                type: "POST",
+                data: {
+                    current: oldPass,
+                    new: newPass,
+                    confirm: rePass,
+                    submit : to == 'admin' ? 'changePassword' : 'changePasswordP'
+                },
+                dataType: "text"
+            });
+            request.done(function(output) {
+                console.log(output);
+                switch (output) {
+                    case 'success':
+                        Toast.fire({
+                            icon: 'success',
+                            title: 'Password changed successfully'
+                        })
+                        loadPage('password')
+                        break;
+                    case 'error':
+                        Toast.fire({
+                            icon: 'error',
+                            title: 'Error in changing your password, try again later'
+                        })
+                        break;
+                    case 'currentError':
+                        Toast.fire({
+                            icon: 'error',
+                            title: 'Your current password is not correct'
+                        })
+                        break;
+                    case 'passwordInvalid':
+                        Toast.fire({
+                            icon: 'error',
+                            title: 'Password length must be should be 8 or more characters'
+                        })
+                        break;
 
-
+                }
+                hideLoading()
+            });
+            request.fail(function(jqXHR, textStatus) {
+                Toast.fire({
+                    icon: 'error',
+                    title: 'Request failed: ' + textStatus
+                })
+                hideLoading()
+            });
+        }else {
+            Toast.fire({
+                icon: 'error',
+                title: 'Password doesn\'t match'
+            })
+        }
+    }
+    else {
+        Toast.fire({
+            icon: 'error',
+            title: 'There is an empty field'
+        })
+    }
+}
+function addStore(id) {
+    showLoading()
+    Swal.fire({
+        title: 'Are you sure?',
+        text: "You're add this medicine to your store!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, Add it!'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            let request = $.ajax({
+                url: "ajax/index.php",
+                type: "POST",
+                data: {
+                    id : id,
+                    submit : 'addStore'
+                },
+                dataType: "text"
+            });
+            request.done(function(output) {
+                console.log(output);
+                switch (output) {
+                    case 'success':
+                        Toast.fire({
+                            icon: 'success',
+                            title: 'Added successfully'
+                        })
+                        loadPage('store','add')
+                        break;
+                    case 'failure':
+                        Toast.fire({
+                            icon: 'error',
+                            title: 'Not added, try again later!'
+                        })
+                        break;
+                    case 'medExist':
+                        Toast.fire({
+                            icon: 'error',
+                            title: 'Medicine already in store!'
+                        })
+                        break;
+                }
+                hideLoading()
+            });
+            request.fail(function(jqXHR, textStatus) {
+                Toast.fire({
+                    icon: 'error',
+                    title: 'Request failed: ' + textStatus
+                })
+                hideLoading()
+            });
+        }
+        else {
+            hideLoading()
+        }
+    })
+}
 function collapseAll($except=null) {
     switch ($except) {
         case 'medicine':

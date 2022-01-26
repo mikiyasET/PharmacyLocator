@@ -1,6 +1,22 @@
 <?php
 include_once 'mvc/connect.php';
-
+if (isset($_SESSION['role']) && ($_SESSION['role'] == 'admin' || $_SESSION['role'] == 'pharmacy')) {
+   if ($_SESSION['role'] == 'admin') {
+       $admin = new AdminView();
+       $admin->id = $_SESSION['id'];
+       if (!$admin->checkID()) {
+           General::go("404");
+       }
+   }elseif ($_SESSION['role'] == 'pharmacy') {
+       $pharmacy = new PharmacyView();
+       $pharmacy->id = $_SESSION['id'];
+       if (!$pharmacy->checkID()) {
+           General::go("404");
+       }
+   }
+}else {
+    General::go('login.php');
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -14,9 +30,6 @@ include_once 'mvc/connect.php';
 
 </head>
 <body>
-<div id="pre-loaders">
-    <div class="lds-grid"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
-</div>
 <div class="body">
     <aside>
         <div class="logo">
@@ -28,49 +41,56 @@ include_once 'mvc/connect.php';
                     <i class="material-icons-outlined">grid_view</i> <span>Dashboard</span>
                 </a>
             </li>
-            <li>
-                <a href="javascript:void(0)" id="medicineLink" class="list-link" onclick="loadPage('medicine')">
-                    <i class="material-icons-outlined">medication</i> <span>Medicine</span><i class="material-icons-outlined">expand_more</i>
-                </a>
-                <ul class="ca-dropdown" id="medicineTab">
-                    <li onclick="loadPage('medicine','add')">Add Medicine</li>
-                    <li onclick="loadPage('medicine','edit')">Edit Medicine</li>
-                    <li onclick="loadPage('medicine','remove')">Remove</li>
-                </ul>
-            </li>
-            <li>
-                <a href="javascript:void(0)" id="locationLink" class="list-link" onclick="loadPage('location')">
-                    <i class="material-icons-outlined">place</i> <span>Location</span><i class="material-icons-outlined">expand_more</i>
-                </a>
-                <ul class="ca-dropdown" id="locationTab">
-                    <li onclick="loadPage('location','add')">Add Location</li>
-                    <li onclick="loadPage('location','edit')">Edit Location</li>
-                    <li onclick="loadPage('location','remove')">Remove</li>
-                </ul>
-            </li>
-            <li>
-                <a href="javascript:void(0)" id="pharmacyLink" class="list-link" onclick="loadPage('pharmacy')">
-                    <i class="material-icons-outlined">local_pharmacy</i> <span>Pharmacy</span><i class="material-icons-outlined">expand_more</i>
-                </a>
-                <ul class="ca-dropdown" id="pharmacyTab">
-                    <li onclick="loadPage('pharmacy','add')">Add Pharmacy</li>
-                    <li onclick="loadPage('pharmacy','edit')">Edit Pharmacy</li>
-                    <li onclick="loadPage('pharmacy','remove')">Remove</li>
-                </ul>
-            </li>
+            <?php
+            if ($_SESSION['role'] == 'admin') {
+            ?>
+                <li>
+                    <a href="javascript:void(0)" id="medicineLink" class="list-link" onclick="loadPage('medicine')">
+                        <i class="material-icons-outlined">medication</i> <span>Medicine</span><i class="material-icons-outlined">expand_more</i>
+                    </a>
+                    <ul class="ca-dropdown" id="medicineTab">
+                        <li onclick="loadPage('medicine','add')">Add Medicine</li>
+                        <li onclick="loadPage('medicine','edit')">Edit Medicine</li>
+                        <li onclick="loadPage('medicine','remove')">Remove</li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="javascript:void(0)" id="locationLink" class="list-link" onclick="loadPage('location')">
+                        <i class="material-icons-outlined">place</i> <span>Location</span><i class="material-icons-outlined">expand_more</i>
+                    </a>
+                    <ul class="ca-dropdown" id="locationTab">
+                        <li onclick="loadPage('location','add')">Add Location</li>
+                        <li onclick="loadPage('location','edit')">Edit Location</li>
+                        <li onclick="loadPage('location','remove')">Remove</li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="javascript:void(0)" id="pharmacyLink" class="list-link" onclick="loadPage('pharmacy')">
+                        <i class="material-icons-outlined">local_pharmacy</i> <span>Pharmacy</span><i class="material-icons-outlined">expand_more</i>
+                    </a>
+                    <ul class="ca-dropdown" id="pharmacyTab">
+                        <li onclick="loadPage('pharmacy','add')">Add Pharmacy</li>
+                        <li onclick="loadPage('pharmacy','edit')">Edit Pharmacy</li>
+                        <li onclick="loadPage('pharmacy','remove')">Remove</li>
+                    </ul>
+                </li>
+            <?php
+            } else if ($_SESSION['role'] == 'pharmacy') {
+            ?>
             <li>
                 <a href="javascript:void(0)" id="storeLink" class="list-link" onclick="loadPage('store')">
                     <i class="material-icons-outlined">archive</i> <span>Store</span><i class="material-icons-outlined">expand_more</i>
                 </a>
                 <ul class="ca-dropdown" id="storeTab">
                     <li onclick="loadPage('store','add')">Add Store</li>
-                    <li onclick="loadPage('store','edit')">Edit Store</li>
                     <li onclick="loadPage('store','remove')">Remove</li>
                 </ul>
             </li>
             <li>
                 <a href="javascript:void(0)" id="leaderboardLink" class="list-link" onclick="loadPage('leaderboard')"><i class="material-icons-outlined">leaderboard</i> <span>LeaderBoard</span></a>
             </li>
+            <?php } ?>
+
             <li>
                 <a href="javascript:void(0)" id="settingsLink" class="list-link" onclick="loadPage('password')"><i class="material-icons-outlined">vpn_key</i> <span>Change Password</span></a>
             </li>
@@ -98,6 +118,6 @@ include_once 'mvc/connect.php';
         </div>
     </div>
 </div>
-<?php include_once './structure/script.php' ?>
 </body>
 </html>
+<?php include_once './structure/script.php' ?>
