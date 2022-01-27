@@ -75,6 +75,14 @@ class Medicine extends Database {
         }
         return [];
     }
+    protected function search() {
+        $result = $this->c()->query("SELECT * FROM medicine WHERE name LIKE '%{$this->name}%' ");
+        $result->execute();
+        if ($result->rowCount() > 0) {
+            return $result->fetchAll();
+        }
+        return [];
+    }
     protected function show() {
         $result = $this->c()->prepare("SELECT * FROM medicine WHERE mid = ?");
         $result->execute([$this->id]);

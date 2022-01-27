@@ -19,4 +19,8 @@ class StoreView extends Store
     {
         return $this->show();
     }
+    public function search()
+    {
+        return parent::search();
+    }
 }

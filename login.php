@@ -5,8 +5,10 @@ include_once 'mvc/connect.php';
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <?php include_once './structure/meta.php' ?>
-    <title>Document</title>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pharmacy Locator</title>
     <?php include_once './structure/links.php' ?>
     <link href="//cdn.jsdelivr.net/npm/@sweetalert2/theme-dark@4/dark.css" rel="stylesheet">
     <?php include_once './structure/script.php' ?>

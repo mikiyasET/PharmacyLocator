@@ -61,4 +61,12 @@ class Store extends Database
         }
         return [];
     }
+    protected function search() {
+        $result = $this->c()->prepare("SELECT m.name as medicine,p.name as pharmacy,p.mapLink as mapLink,l.name as location FROM medicine as m join store as s on s.mid = m.mid join pharmacy p on s.pid = p.pid join location l on l.lid = p.lid where m.name LIKE ? ");
+        $result->execute(['%'.$this->medicine.'%']);
+        if ($result->rowCount() > 0) {
+            return $result->fetchAll();
+        }
+        return [];
+    }
 }

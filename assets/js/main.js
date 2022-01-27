@@ -614,8 +614,44 @@ function showLoading() {
 function hideLoading() {
     $('#mainpage').removeClass('loading')
 }
-
-
+function showHint(str) {
+    if (str.length==0) {
+        document.getElementById("medicinesHint").innerHTML="";
+        return;
+    }
+    var xmlhttp=new XMLHttpRequest();
+    xmlhttp.onreadystatechange=function() {
+        if (this.readyState==4 && this.status==200) {
+            document.getElementById("medicinesHint").innerHTML=this.responseText;
+        }
+    }
+    xmlhttp.open("GET","ajax/medicinesHint.php?q="+str,true);
+    xmlhttp.send();
+}
+function search() {
+    query = $("input[type='search']").val();
+    showLoading();
+    let request = $.ajax({
+        url: "ajax/search.php",
+        type: "GET",
+        data: {
+            query: query,
+            submit : 'search'
+        },
+        dataType: "text"
+    });
+    request.done(function(output) {
+        $("#mainpage").html(output);
+    });
+    request.fail(function(jqXHR, textStatus) {
+        Toast.fire({
+            icon: 'error',
+            title: 'Connection error'
+        })
+        hideLoading()
+    });
+    hideLoading();
+}
 const Toast = Swal.mixin({
     toast: true,
     position: 'top-end',

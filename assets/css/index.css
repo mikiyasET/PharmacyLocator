@@ -379,3 +379,5 @@ nav {
 .ca-dark {
     background-color: var(--asideDark-darkMode) !important;
 }
+
+.user-content {}
