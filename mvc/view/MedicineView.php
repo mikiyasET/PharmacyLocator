@@ -28,4 +28,8 @@ class MedicineView extends Medicine
     {
         return $this->show();
     }
+    public function getID()
+    {
+        return parent::getID();
+    }
 }

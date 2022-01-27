@@ -20,7 +20,7 @@ class Record extends Database
         if ($this->checkMed()) {
             $this->counter = $this->counter() + 1;
             $result = $this->c()->prepare("UPDATE record SET counter = ? WHERE mid = ? and uid = ?");
-            return $result->execute([$this->counter,$this->medicine,$this->id]);
+            return $result->execute([$this->counter,$this->medicine,$this->user]);
         }
         return false;
     }
@@ -56,7 +56,7 @@ class Record extends Database
     }
 
     protected function showAll() {
-        $result = $this->c()->query("SELECT rid, uid, sum(counter) as searched, name, description FROM record join medicine m on m.mid = record.mid group by counter order by searched");
+        $result = $this->c()->query("SELECT sum(counter) as searched, name FROM record join medicine m on m.mid = record.mid group by name order by searched desc limit 10");
         $result->execute();
         if ($result->rowCount() > 0) {
             return $result->fetchAll();

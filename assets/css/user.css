@@ -1,3 +1,36 @@
+body {
+    padding: 0;
+    margin: 0;
+}
+@font-face {
+    font-family: PharmacyFont;
+    src: url(../fonts/pharmacy.ttf);
+}
+a {
+    text-decoration: none !important;
+    color: inherit !important;
+    cursor: pointer;
+}
+.light-grey {
+    background-color: #F0F4F3;
+}
+.logo {
+    font-family: PharmacyFont;
+    padding: 2rem;
+    cursor: pointer;
+}
+.navTab {
+    list-style: none;
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: flex-end;
+    width: 100%;
+    padding: 2rem;
+}
+.navTab li {
+    padding: 0 .5rem;
+    cursor: pointer;
+}
 .searchTab {
     color: #fff;
     background-image: url(../images/user-background.png);
@@ -5,14 +38,18 @@
     background-repeat: no-repeat;
     background-size: cover;
     overflow-x: hidden;
-    display: flex;
-    align-items: center;
     min-height: 450px; /*300px*/
-    padding: 1rem 14rem; /* 1rem 3rem */
+    /*padding: 1rem 14rem; !* 1rem 3rem *!*/
     position: relative;
     z-index: 1;
 }
-.searchTab input {
+.searchBox {
+    display: flex;
+    align-items: center;
+    padding: 1rem 14rem; /* 1rem 3rem */
+    width: 100%;
+}
+.searchBox input {
     width: 100%;
     height: 40px;
     padding: 0px 15px;
@@ -21,7 +58,7 @@
     background: #eee;
     border-radius: 3px 0 0 3px;
 }
-.searchTab button {
+.searchBox button {
     overflow: visible;
     position: relative;
     float: right;
@@ -48,4 +85,206 @@
 .search-field {
     overflow-x: hidden;
     padding: 1rem 5rem;
+}
+
+/* login css */
+
+.loginPage {
+    padding: 5rem 0;
+    height: 100%;
+    background: #f6f5f7;
+    margin: auto;
+}
+
+h1 {
+    font-weight: bold;
+    margin: 0;
+}
+
+p {
+    font-size: 14px;
+    font-weight: 100;
+    line-height: 20px;
+    letter-spacing: 0.5px;
+    margin: 20px 0 30px;
+}
+
+
+button {
+    border-radius: 20px;
+    border: 1px solid #FF4B2B;
+    background-color: #FF4B2B;
+    color: #FFFFFF;
+    font-size: 12px;
+    font-weight: bold;
+    padding: 12px 45px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    transition: 80ms ease-in;
+}
+
+button:active {
+    transform: scale(0.95);
+}
+
+button:focus {
+    outline: none;
+}
+
+button.ghost {
+    background-color: transparent;
+    border-color: #FFFFFF;
+}
+
+.loginform {
+    background-color: #FFFFFF;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    padding: 0 50px;
+    height: 100%;
+    text-align: center;
+}
+
+input {
+    background-color: #eee;
+    border: none;
+    padding: 12px 15px;
+    margin: 8px 0;
+    width: 100%;
+}
+
+.container {
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 14px 28px rgba(0,0,0,0.25),
+    0 10px 10px rgba(0,0,0,0.22);
+    position: relative;
+    overflow: hidden;
+    width: 768px;
+    max-width: 100%;
+    min-height: 480px;
+}
+
+.form-container {
+    position: absolute;
+    top: 0;
+    height: 100%;
+    transition: all 0.6s ease-in-out;
+}
+
+.sign-in-container {
+    left: 0;
+    width: 50%;
+    z-index: 2;
+}
+
+.container.right-panel-active .sign-in-container {
+    transform: translateX(100%);
+}
+
+.sign-up-container {
+    left: 0;
+    width: 50%;
+    opacity: 0;
+    z-index: 1;
+}
+
+.container.right-panel-active .sign-up-container {
+    transform: translateX(100%);
+    opacity: 1;
+    z-index: 5;
+}
+
+.overlay-container {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 50%;
+    height: 100%;
+    overflow: hidden;
+    transition: transform 0.6s ease-in-out;
+    z-index: 100;
+}
+
+.container.right-panel-active .overlay-container{
+    transform: translateX(-100%);
+}
+
+.overlay {
+    background: #FF416C;
+    background: linear-gradient(to right, #FF4B2B, #FF416C);
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: 0 0;
+    color: #FFFFFF;
+    position: relative;
+    left: -100%;
+    height: 100%;
+    width: 200%;
+    transform: translateX(0);
+    transition: 0.6s ease-in-out;
+}
+
+.container.right-panel-active .overlay {
+    transform: translateX(50%);
+}
+
+.overlay-panel {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    padding: 0 40px;
+    text-align: center;
+    top: 0;
+    height: 100%;
+    width: 50%;
+    transform: translateX(0);
+    transition: 0.6s ease-in-out;
+}
+
+.overlay-left {
+    transform: translateX(-20%);
+}
+
+.container.right-panel-active .overlay-left {
+    transform: translateX(0);
+}
+
+.overlay-right {
+    right: 0;
+    transform: translateX(0);
+}
+
+.container.right-panel-active .overlay-right {
+    transform: translateX(20%);
+}
+
+#logbox {
+    background-color: #fff;
+    width: 30rem;
+    padding: 2rem;
+    margin: 5rem auto;
+    box-shadow: 0px 0px 16px 1px #5a57ef;
+}
+.ca-btn {
+    background-color: #6c68f2;
+    color: white;
+}
+.ca-btn:hover,.ca-btn:focus,.ca-btn:active {
+    background-color: #5652f0;
+    color: white;
+}
+.medicineDetails {
+    text-align: center;
+}
+.medicineDetails > a {
+    background-color: #524fd0;
+    display: inline-flex;
+    flex-wrap: nowrap;
+    text-align: center;
+    align-items: center;
 }

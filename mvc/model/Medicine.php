@@ -91,4 +91,13 @@ class Medicine extends Database {
         }
         return [];
     }
+    protected function getID() {
+        $result = $this->c()->prepare("SELECT * FROM medicine where name = ?");
+        $result->execute([$this->name]);
+        if ($result->rowCount() > 0) {
+            $x = new ArrayObject($result->fetch(), ArrayObject::ARRAY_AS_PROPS);
+            return $x->mid;
+        }
+        return 0;
+    }
 }

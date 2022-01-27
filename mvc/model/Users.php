@@ -52,4 +52,49 @@ class Users extends Database
         }
         return false;
     }
+    protected function getID() {
+        $result = $this->c()->prepare("SELECT * FROM users where username = ?");
+        $result->execute([$this->username]);
+        if ($result->rowCount() > 0) {
+            $x = new ArrayObject($result->fetch(), ArrayObject::ARRAY_AS_PROPS);
+            return $x->uid;
+        }
+        return 0;
+    }
+    protected function check() {
+        if ($this->checkUsername()) {
+            $this->id = $this->getID();
+            if ($this->isPassword()) {
+                return true;
+            }
+        }
+        return false;
+    }
+    protected function isPassword() {
+        $sql = "SELECT * FROM users WHERE uid = ?";
+        $stmt = $this->c()->prepare($sql);
+        $stmt->execute([$this->id]);
+        $exe = $stmt->fetch();
+        if(password_verify(trim($this->password), $exe['password'])) {
+            return true;
+        }else {
+            return false;
+        }
+    }
+    protected function show() {
+        $result = $this->c()->prepare("SELECT * FROM users WHERE uid = ?");
+        $result->execute([$this->id]);
+        if ($result->rowCount() > 0) {
+            return new ArrayObject($result->fetch(), ArrayObject::ARRAY_AS_PROPS);
+        }
+        return [];
+    }
+    protected function showAll() {
+        $result = $this->c()->query("SELECT * FROM users");
+        $result->execute();
+        if ($result->rowCount() > 0) {
+            return $result->fetchAll();
+        }
+        return [];
+    }
 }

@@ -4,16 +4,29 @@ include_once '../mvc/connect.php';
 $searchKey = trim($_GET['query']);
 $medicines = new StoreView();
 $medicines->medicine = $searchKey;
+
+$med = new MedicineView();
+$med->name = $searchKey;
+$medid = $med->getID();
+if ($medid != 0) {
+    echo '<input type="hidden" value="exists">';
+    $record = new RecordController();
+    $record->medicine = $medid;
+    $record->user = $_SESSION['user'];
+    $record->add();
+}
+
 $result = $medicines->search();
 if (count($result) > 0) {
     echo '<div class="row">';
     foreach ($result as $medicine) {
         echo "<div class=\"col-md-4\">
-                    <div class=\"card\">
+                    <div class=\"card\" title=\"This pharmacy have the medicine you're looking for.\">
+                      <img src=\"assets/images/pharmacies/{$medicine['pImage']}\" class=\"card-img-top\" alt=\"{$medicine['pharmacy']} Image\" height='300px'>
                         <div class=\"card-body\">
                             <h5 class=\"card-title\">{$medicine['pharmacy']}</h5>
                             <h6 class=\"card-subtitle mb-2 text-muted\">{$medicine['location']}</h6>
-                            <p class=\"card-text\">This pharmacy have the medicine you're looking for.</p>
+                            <p class=\"card-text\">{$medicine['pDesc']}</p>
                             <a class='showmap card-link text-decoration-none' data-bs-toggle='modal' data-bs-target='#info' data-link='".$medicine['mapLink']."'>Google Map</a>
                         </div>
                     </div>
@@ -22,7 +35,7 @@ if (count($result) > 0) {
     echo '</div>';
 }
 else {
-    echo '<p class="text-center">Medicine is not found</p>';
+    echo '<p class="text-center" style="font-size: 33px;font-weight: 400;color: #aaa;">Medicine is not found</p>';
 }
 ?>
 <div class="modal fade" id="info" tabindex="-1" aria-labelledby="detailsModalLabel" aria-hidden="true">

@@ -337,6 +337,7 @@ function pharmacyBtn(data = 'add',id = null) {
     let email = $("input[name='email']").val() ?? '';
     let password = $("input[name='password']").val() ?? '';
     let cpassword = $("input[name='cpassword']").val() ?? '';
+    let description = $("textarea[name='description']").val() ?? '';
 
     console.log(location);
     if ((password == cpassword) || data == 'edit') {
@@ -642,6 +643,13 @@ function search() {
     });
     request.done(function(output) {
         $("#mainpage").html(output);
+        if (output.search('<input type="hidden" value="exists">') != -1) {
+            $('#medDetails').removeClass('d-none')
+            $('#medDetails').attr('data-med',query)
+        }else {
+            $('#medDetails').removeClass('d-none')
+            $('#medDetails').addClass('d-none')
+        }
     });
     request.fail(function(jqXHR, textStatus) {
         Toast.fire({

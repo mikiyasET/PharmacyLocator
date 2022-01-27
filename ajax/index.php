@@ -1,9 +1,9 @@
 <?php
 include_once '../mvc/connect.php';
 
-function uploadFile($file) {
+function uploadFile($file,$to) {
     $valid_extensions = array('jpeg', 'jpg', 'png'); // valid extensions
-    $path = APP_ROOT.'/assets/images/medicines/'; // upload directory
+    $path = APP_ROOT."/assets/images/$to/"; // upload directory
     if($file)
     {
         $img = $file['name'];
@@ -68,32 +68,39 @@ if (isset($_POST['submit'])) {
                         $pharmacy->location = $_POST['location'] ?? '';
                         $pharmacy->mapLink = $_POST['mapLink'] ?? '';
                         $pharmacy->password = $_POST['password'] ?? '';
-                        if (filter_var($pharmacy->email, FILTER_VALIDATE_EMAIL)) {
-                            if (strlen($pharmacy->password) >= 8) {
-                                if (!$pharmacyv->checkNameEmail()) {
-                                    echo $pharmacy->add() ? 'pharmacySuccess' : 'errorDefault';
+                        $pharmacy->description = $_POST['description'] ?? '';
+                        $pharmacy->image = uploadFile($_FILES['image'],'pharmacies');
+                        if ($pharmacy->image != '') {
+                            if (filter_var($pharmacy->email, FILTER_VALIDATE_EMAIL)) {
+                                if (strlen($pharmacy->password) >= 8) {
+                                    if (!$pharmacyv->checkNameEmail()) {
+                                        echo $pharmacy->add() ? 'success' : 'errorDefault';
+                                    } else {
+                                        echo 'nameExist';
+                                    }
                                 } else {
-                                    echo 'pharmacyNameEmailExist';
+                                    echo 'passwordLength';
                                 }
                             } else {
-                                echo 'passwordLength';
+                                echo 'emailError';
                             }
-                        } else {
-                            echo 'emailError';
+                        }else {
+                            echo 'imageError';
                         }
                         break;
                     case 'addMedicine':
                         $medicine->name = $medicinev->name = $_POST['name'];
                         $medicine->description = $medicinev->description = $_POST['description'];
                         $medicine->admin = $medicinev->admin = $_SESSION['id'];
-                        $medicine->img = uploadFile($_FILES['image']);
+                        $medicine->img = uploadFile($_FILES['image'],'medicines');
                         if ($medicine->img != '') {
                             if (!$medicinev->checkName()) {
                                 echo $medicine->add() ? 'success' : 'errorDefault';
                             }else {
                                 echo 'nameExist';
                             }
-                        }else {
+                        }
+                        else {
                             echo 'imageError';
                         }
                         break;
@@ -115,18 +122,29 @@ if (isset($_POST['submit'])) {
                         $pharmacy->email = $pharmacyv->email = $_POST['email'] ?? '';
                         $pharmacy->location = $_POST['location'] ?? '';
                         $pharmacy->mapLink = $_POST['mapLink'] ?? '';
-                        if ($pharmacyv->checkID()) {
-                            if (filter_var($pharmacy->email, FILTER_VALIDATE_EMAIL)) {
-                                if (!$pharmacyv->checkNameEmailExceptThis()) {
-                                    echo $pharmacy->edit() ? 'editPharmacySuccess' : 'errorDefault2';
+                        $pharmacy->description = $_POST['description'] ?? '';
+                        if ($_FILES["image"]["size"] > 0) {
+                            $pharmacy->image = uploadFile($_FILES['image'],'pharmacies');
+                        }else {
+                            $pharmacy->image = 'noImage';
+                        }
+                        if ($pharmacy->image != '' || $pharmacy->image == 'noImage') {
+                            if ($pharmacy->image == 'noImage') {
+                                $pharmacy->image = '';
+                            }
+                            if ($pharmacyv->checkID()) {
+                                if (filter_var($pharmacy->email, FILTER_VALIDATE_EMAIL)) {
+                                    if (!$pharmacyv->checkNameEmailExceptThis()) {
+                                        echo $pharmacy->edit() ? 'editsuccess' : 'errorDefault';
+                                    } else {
+                                        echo 'pharmacyNameEmailExist';
+                                    }
                                 } else {
-                                    echo 'pharmacyNameEmailExist';
+                                    echo 'emailError';
                                 }
                             } else {
-                                echo 'emailError';
+                                echo 'unknownID';
                             }
-                        }else {
-                            echo 'editPharmacyUnknownID';
                         }
                         break;
                     case 'editMedicine':
@@ -134,7 +152,7 @@ if (isset($_POST['submit'])) {
                         $medicine->description = $medicinev->description = $_POST['description'];
                         $medicine->admin = $medicinev->admin = $_SESSION['id'];
                         if ($_FILES["image"]["size"] > 0) {
-                            $medicine->img = uploadFile($_FILES['image']);
+                            $medicine->img = uploadFile($_FILES['image'],'medicines');
                         }else {
                             $medicine->img = 'noImage';
                         }
@@ -206,7 +224,8 @@ if (isset($_POST['submit'])) {
                         echo 'errorDefault';
                 }
             }
-        }elseif ($_SESSION['role'] == 'pharmacy') {
+        }
+        elseif ($_SESSION['role'] == 'pharmacy') {
             $pharmacyy = new PharmacyView();
             $pharmacyy->id = $_SESSION['id'];
             if ($pharmacyy->checkID()) {

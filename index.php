@@ -86,11 +86,11 @@ if (isset($_SESSION['role']) && ($_SESSION['role'] == 'admin' || $_SESSION['role
                     <li onclick="loadPage('store','remove')">Remove</li>
                 </ul>
             </li>
+
+            <?php } ?>
             <li>
                 <a href="javascript:void(0)" id="leaderboardLink" class="list-link" onclick="loadPage('leaderboard')"><i class="material-icons-outlined">leaderboard</i> <span>LeaderBoard</span></a>
             </li>
-            <?php } ?>
-
             <li>
                 <a href="javascript:void(0)" id="settingsLink" class="list-link" onclick="loadPage('password')"><i class="material-icons-outlined">vpn_key</i> <span>Change Password</span></a>
             </li>

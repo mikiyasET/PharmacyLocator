@@ -8,26 +8,42 @@ class Pharmacy extends Database
     public $password;
     public $mapLink;
     public $location;
+    public $description;
+    public $image;
 
     protected function add() {
         $this->id = uniqid();
         if (!$this->checkNameEmail()) {
-            $result = $this->c()->prepare("INSERT INTO pharmacy (pid, name, email, password,mapLink, lid) VALUES (?,?,?,?,?,?)");
-            return $result->execute([$this->id,$this->name,$this->email,password_hash($this->password, PASSWORD_BCRYPT),$this->mapLink,$this->location]);
+            $result = $this->c()->prepare("INSERT INTO pharmacy (pid, name, email, password,description,img,mapLink, lid) VALUES (?,?,?,?,?,?,?,?)");
+            return $result->execute([$this->id,$this->name,$this->email,password_hash($this->password, PASSWORD_BCRYPT),$this->description,$this->image,$this->mapLink,$this->location]);
         }
         return false;
     }
     protected function edit() {
         if ($this->checkID()) {
-            $result = $this->c()->prepare("UPDATE pharmacy SET name = ?,email = ?,lid = ?,mapLink = ? WHERE pid = ?");
-            return $result->execute([$this->name,$this->email,$this->location,$this->mapLink,$this->id]);
+            if ($this->image == '') {
+                $result = $this->c()->prepare("UPDATE pharmacy SET name = ?,email = ?,lid = ?,mapLink = ?,description = ? WHERE pid = ?");
+                return $result->execute([$this->name,$this->email,$this->location,$this->mapLink,$this->description,$this->id]);
+            }
+            else {
+                $pre_img = $this->show()->img;
+                $result = $this->c()->prepare("UPDATE pharmacy SET name = ?,email = ?,lid = ?,mapLink = ?,description = ?,img = ? WHERE pid = ?");
+                if($result->execute([$this->name,$this->email,$this->location,$this->mapLink,$this->description,$this->image,$this->id])){
+                    @unlink(APP_ROOT."/assets/images/pharmacies/$pre_img");
+                    return true;
+                }
+            }
         }
         return false;
     }
     protected function remove() {
         if ($this->checkID()) {
+            $pre_img = $this->show()->img;
             $result = $this->c()->prepare("DELETE FROM pharmacy WHERE pid = ?");
-            return $result->execute([$this->id]);
+            if ($result->execute([$this->id])) {
+                @unlink(APP_ROOT."/assets/images/pharmacies/$pre_img");
+                return true;
+            }
         }
         return false;
     }
